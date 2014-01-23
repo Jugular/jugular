@@ -4,3 +4,5 @@
 *.jar
 *.war
 *.ear
+/build-tools/target/
+/target/

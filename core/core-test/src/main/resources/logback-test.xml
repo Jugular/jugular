@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reference: http://logback.qos.ch/manual/configuration.html -->
+<configuration debug="true">
+    <!-- Reference http://logback.qos.ch/manual/appenders.html -->
+    <!-- 
+    The ConsoleAppender, as the name indicates, appends on the console, or more
+    precisely on System.out or System.err, the former being the default target.
+    ConsoleAppender formats events with the help of an encoder specified by the
+    user. Encoders will be discussed in a subsequent chapter. Both System.out
+    and System.err are of type java.io.PrintStream. Consequently, they are 
+    wrapped inside an OutputStreamWriter which buffers I/O operations. 
+    -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %boldMagenta(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>target/log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>target/log-%d{MM-dd-yyyy}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ROLLING" />
+    </root>
+</configuration>

@@ -6,3 +6,12 @@
 *.ear
 /build-tools/target/
 /target/
+/module/target/
+/test/target/
+/test/integration/target/
+/test/system/target/
+/core/core-api/target/
+/core/target/
+/core/core-test/target/
+/module/jodatime/target/
+/module/joda-time/target/

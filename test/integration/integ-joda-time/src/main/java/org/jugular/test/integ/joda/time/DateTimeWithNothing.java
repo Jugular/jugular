@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jugular.jodatime.core;
+package org.jugular.test.integ.joda.time;
 
-import org.glassfish.hk2.api.Factory;
-import org.glassfish.hk2.api.PerLookup;
 import org.joda.time.DateTime;
+import org.jugular.core.api.annotation.Jugular;
 import org.jvnet.hk2.annotations.Service;
 
 /**
@@ -25,17 +24,23 @@ import org.jvnet.hk2.annotations.Service;
  * @author Sharmarke Aden (saden1)
  */
 @Service
-public class DefaultDateTime implements Factory<DateTime> {
+public class DateTimeWithNothing {
 
-    @PerLookup
-    @Override
-    public DateTime provide() {
-        return new DateTime();
+    private final DateTime constructor;
+    @Jugular
+    private DateTime field;
+
+    @Jugular
+    DateTimeWithNothing(DateTime dateTime) {
+        this.constructor = dateTime;
     }
 
-    @Override
-    public void dispose(DateTime instance) {
-        instance = null;
+    public DateTime getField() {
+        return field;
+    }
+
+    public DateTime getConstructor() {
+        return constructor;
     }
 
 }

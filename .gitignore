@@ -15,3 +15,5 @@
 /core/core-test/target/
 /module/jodatime/target/
 /module/joda-time/target/
+/test/integration/integ-joda-time/target/
+/core/core-common/target/

@@ -33,5 +33,10 @@
             <artifactId>core-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jugular.core</groupId>
+            <artifactId>core-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

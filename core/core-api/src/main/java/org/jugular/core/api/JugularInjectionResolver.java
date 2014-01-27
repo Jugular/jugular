@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jugular.jodatime;
+package org.jugular.core.api;
 
-import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Type;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.glassfish.hk2.api.Injectee;
 import org.glassfish.hk2.api.InjectionResolver;
 import static org.glassfish.hk2.api.InjectionResolver.SYSTEM_RESOLVER_NAME;
+import org.glassfish.hk2.api.IterableProvider;
 import org.glassfish.hk2.api.ServiceHandle;
 import org.jugular.core.api.annotation.Jugular;
-import org.jugular.jodatime.annotation.Joda;
 import org.jvnet.hk2.annotations.Service;
 
 /**
@@ -31,35 +31,43 @@ import org.jvnet.hk2.annotations.Service;
  * @author Sharmarke Aden (saden1)
  */
 @Service
-public class DateTimeResolver implements InjectionResolver<Jugular> {
+public class JugularInjectionResolver implements InjectionResolver<Jugular> {
 
-    private final InjectionResolver<Inject> resolver;
+    private final InjectionResolver<Inject> systemResolver;
+    private final IterableProvider<JugularResolver> delegateResolvers;
 
     @Inject
-    DateTimeResolver(@Named(SYSTEM_RESOLVER_NAME) InjectionResolver<Inject> systemResolver) {
-        this.resolver = systemResolver;
+    JugularInjectionResolver(
+            @Named(SYSTEM_RESOLVER_NAME) InjectionResolver<Inject> systemResolver,
+            IterableProvider<JugularResolver> delegateResolvers) {
+        this.systemResolver = systemResolver;
+        this.delegateResolvers = delegateResolvers;
     }
 
     @Override
     public Object resolve(Injectee injectee, ServiceHandle<?> root) {
-        AnnotatedElement parent = injectee.getParent();
+        Type type = injectee.getRequiredType();
 
-        Joda joda = parent.getAnnotation(Joda.class);
+        if (type instanceof Class) {
+            String className = ((Class) type).getCanonicalName();
+            JugularResolver delegate = delegateResolvers.named(className)
+                    .get();
 
-        if (joda == null) {
-            return resolver.resolve(injectee, root);
+            if (delegate != null) {
+                return delegate.resolve(injectee, root);
+            }
+
         }
-
-        return resolver.resolve(injectee, root);
+        return systemResolver.resolve(injectee, root);
     }
 
     @Override
     public boolean isConstructorParameterIndicator() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isMethodParameterIndicator() {
-        return true;
+        return false;
     }
 }

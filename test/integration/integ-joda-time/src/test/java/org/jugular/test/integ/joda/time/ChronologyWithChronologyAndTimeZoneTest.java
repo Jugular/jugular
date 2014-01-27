@@ -17,8 +17,10 @@ package org.jugular.test.integ.joda.time;
 
 import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.joda.time.DateTime;
-import static org.joda.time.chrono.ISOChronology.getInstanceUTC;
+import org.joda.time.Chronology;
+import org.joda.time.DateTimeZone;
+import static org.joda.time.DateTimeZone.forID;
+import static org.joda.time.chrono.GJChronology.getInstance;
 import org.jugular.jodatime.JodaTimeController;
 import org.jvnet.testing.hk2testng.HK2;
 import org.testng.annotations.BeforeMethod;
@@ -29,10 +31,10 @@ import org.testng.annotations.Test;
  * @author Sharmarke Aden (saden1)
  */
 @HK2
-public class DateTimeWithDefaultsTest {
+public class ChronologyWithChronologyAndTimeZoneTest {
 
     @Inject
-    DateTimeWithDefaults service;
+    ChronologyWithChronologyAndTimeZone service;
     @Inject
     JodaTimeController controller;
 
@@ -44,17 +46,20 @@ public class DateTimeWithDefaultsTest {
 
     @Test
     public void assertConstructorInjection() {
-        DateTime dateTime = service.getConstructor();
-        assertThat(dateTime).isNotNull();
-        assertThat(dateTime.getZone().getID()).isEqualTo("UTC");
-        assertThat(dateTime.getChronology()).isEqualTo(getInstanceUTC());
+        Chronology chronology = service.getConstructor();
+        assertThat(chronology).isNotNull();
+        DateTimeZone zone = forID("America/Los_Angeles");
+        assertThat(chronology.getZone()).isEqualTo(zone);
+        assertThat(chronology).isEqualTo(getInstance(zone));
     }
 
     @Test
     public void assertFieldInjection() {
-        DateTime dateTime = service.getField();
-        assertThat(dateTime).isNotNull();
-        assertThat(dateTime.getChronology()).isEqualTo(getInstanceUTC());
+        Chronology chronology = service.getField();
+        assertThat(chronology).isNotNull();
+        DateTimeZone zone = forID("America/Los_Angeles");
+        assertThat(chronology.getZone()).isEqualTo(zone);
+        assertThat(chronology).isEqualTo(getInstance(zone));
     }
 
 }

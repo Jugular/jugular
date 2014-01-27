@@ -19,7 +19,8 @@ import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.chrono.GregorianChronology;
+import static org.joda.time.DateTimeZone.forID;
+import static org.joda.time.chrono.GregorianChronology.getInstance;
 import org.jugular.jodatime.JodaTimeController;
 import org.jvnet.testing.hk2testng.HK2;
 import org.testng.annotations.BeforeMethod;
@@ -46,21 +47,21 @@ public class DateTimeWithChronologyAndTimeZoneTest {
     @Test
     public void assertConstructorInjection() {
         DateTime dateTime = service.getConstructor();
-        DateTimeZone timeZone = DateTimeZone.forID("America/Los_Angeles");
+        DateTimeZone timeZone = forID("America/Los_Angeles");
         assertThat(dateTime).isNotNull();
         assertThat(dateTime.getZone()).isEqualTo(timeZone);
         assertThat(dateTime.getChronology())
-                .isEqualTo(GregorianChronology.getInstance(timeZone));
+                .isEqualTo(getInstance(timeZone));
     }
 
     @Test
     public void assertFieldInjection() {
         DateTime dateTime = service.getField();
-        DateTimeZone timeZone = DateTimeZone.forID("America/Los_Angeles");
+        DateTimeZone timeZone = forID("America/Los_Angeles");
         assertThat(dateTime).isNotNull();
         assertThat(dateTime.getZone()).isEqualTo(timeZone);
         assertThat(dateTime.getChronology())
-                .isEqualTo(GregorianChronology.getInstance(timeZone));
+                .isEqualTo(getInstance(timeZone));
 
     }
 

@@ -19,7 +19,8 @@ import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.chrono.IslamicChronology;
+import static org.joda.time.DateTimeZone.forID;
+import static org.joda.time.chrono.IslamicChronology.getInstance;
 import org.jugular.jodatime.JodaTimeController;
 import org.jvnet.testing.hk2testng.HK2;
 import org.testng.annotations.BeforeMethod;
@@ -46,19 +47,19 @@ public class DateTimeWithChronologyTest {
     @Test
     public void assertConstructorInjection() {
         DateTime dateTime = service.getConstructor();
-        DateTimeZone timeZone = DateTimeZone.forID("UTC");
+        DateTimeZone timeZone = forID("UTC");
         assertThat(dateTime).isNotNull();
         assertThat(dateTime.getZone()).isEqualTo(timeZone);
-        assertThat(dateTime.getChronology()).isEqualTo(IslamicChronology.getInstance(timeZone));
+        assertThat(dateTime.getChronology()).isEqualTo(getInstance(timeZone));
     }
 
     @Test
     public void assertFieldInjection() {
         DateTime dateTime = service.getField();
-        DateTimeZone timeZone = DateTimeZone.forID("UTC");
+        DateTimeZone timeZone = forID("UTC");
         assertThat(dateTime).isNotNull();
         assertThat(dateTime.getZone()).isEqualTo(timeZone);
-        assertThat(dateTime.getChronology()).isEqualTo(IslamicChronology.getInstance(timeZone));
+        assertThat(dateTime.getChronology()).isEqualTo(getInstance(timeZone));
 
     }
 
